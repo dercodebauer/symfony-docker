@@ -1,0 +1,49 @@
+Container environment for Symfony 5:
+
+Requirements for Symfony 5:
+- PHP 7.2.5
+- php ext:  Ctype, iconv, JSON, PCRE, Session, SimpleXML, and Tokenizer
+- composer
+- mysql
+- nginx
+
+
+Working with the Containers:
+
+docker-compose up -d
+--> runs (and builds if not already built) the containers according to the images (blue prints) described in the docker files
+
+docker-compose up -d --build
+--> rebuilds containers (use if you have changed docker-compose.yml or one of the docker files) 
+
+docker ps
+--> list the running docker containers
+
+docker-compose stop
+--> stop running docker containers
+
+docker rm <name_of_docker_container>
+--> remove docker container (find name with docker ps)
+
+docker exec -it <name_of_docker_container> bash
+--> get access to bash in a docker container (use "exit" to leave the container)
+
+- To run PHPUnit, Composer or any Symfony Cmd use the bash in the "app" container
+- To get console access to mysql databases use the bash in the "database" container as you would on your local system: mysql -umysql_user -ppasswd (you can find and change the credentials in the docker-compose file)
+ 
+
+See frontend of project:
+
+Port 8080 of the docker interface is mapped to port 80 of the "web" container where nginx is running. Go to localhost:8080 to use the frontend of yout project.
+
+
+Use PHPMyAdmin:
+
+Port 8090 of the docker interface is mapped to port 80 of the "phpmyadmin" container. Go to localhost:8090 to use PHPMyAdmin to manage the databases of the "database" container.
+
+
+Use XDEBUG with Docker and PHPStorm:
+
+
+
+

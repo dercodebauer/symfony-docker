@@ -1,0 +1,50 @@
+version: '2'
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: docker/app.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    ports:
+      - "9000:9000"
+
+  database:
+    build: 
+      context: .
+      dockerfile: docker/database.dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root_passwd
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_passwd
+    ports:
+      - "33061:3306"
+    volumes:
+      - dbdata:/var/lib/msql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.1
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: database
+      PMA_USER: root
+      PMA_PASSWORD: root_passwd
+    restart: always
+    ports:
+      - "8090:80"
+    volumes:
+      - /sessions
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.dockerfile
+    working_dir: /var/www
+    volumes_from:
+      - app
+    ports:
+      - "8080:80"
+
+volumes:
+  dbdata:
